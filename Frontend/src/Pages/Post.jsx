@@ -16,7 +16,7 @@ const Post = () => {
        formdata,
        { withCredentials: true },
      );
-     console.log(res.data);
+   
      navigate("/admin");
    } catch (err) {
      console.error("Upload failed:", err.response?.data || err.message);
