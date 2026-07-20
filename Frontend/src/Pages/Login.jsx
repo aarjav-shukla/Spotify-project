@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import heroImage from "../assets/hero.png";
-import axios from "axios";
+import { authAPI } from "../api";
 
 const initialForm = {
   username: "",
@@ -76,16 +76,12 @@ const Login = () => {
     setError("");
 
     try {
-      const response = await axios.post(
-        "https://spotify-project-la1t.onrender.com/api/auth/registeruser",
-        {
-          username: form.username,
-          email: form.email,
-          password: form.password,
-          role: form.role,
-        },
-        { withCredentials: true },
-      );
+      const response = await authAPI.register({
+        username: form.username,
+        email: form.email,
+        password: form.password,
+        role: form.role,
+      });
 
       console.log(response.data);
       navigate(form.role === "artist" ? "/admin" : "/feed");
@@ -102,15 +98,11 @@ const Login = () => {
     setLoginError("");
 
     try {
-      const response = await axios.post(
-        "https://spotify-project-la1t.onrender.com/api/auth/loginuser",
-        {
-          username: loginForm.identifier,
-          email: loginForm.identifier,
-          password: loginForm.password,
-        },
-        { withCredentials: true },
-      );
+      const response = await authAPI.login({
+        username: loginForm.identifier,
+        email: loginForm.identifier,
+        password: loginForm.password,
+      });
 
       console.log(response.data);
       navigate(response.data.user?.role === "artist" ? "/admin" : "/feed");

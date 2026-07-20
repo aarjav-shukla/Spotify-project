@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import axios from "axios";
+import { musicAPI } from "../api";
 
 const loadPreferenceMap = (key) => {
   try {
@@ -33,16 +33,20 @@ const Feed = () => {
   const [volume, setVolume] = useState(0.82);
 
   useEffect(() => {
-    axios.get("https://spotify-project-la1t.onrender.com/api/music/getmusic").then((res) => {
-      setmusics(res.data.musics);
-    });
-  },[]);
-  useEffect(()=>{
-    axios.get("https://spotify-project-la1t.onrender.com/api/music/getalbums").then((res)=>{
-      setalbums(res.data.albums)
-      console.log(res.data.albums)
-    });
-  })
+    musicAPI.getAll()
+      .then((res) => {
+        setmusics(res.data.musics);
+      })
+      .catch((err) => console.error("Failed to get musics:", err));
+  }, []);
+
+  useEffect(() => {
+    musicAPI.getAlbums()
+      .then((res) => {
+        setalbums(res.data.albums);
+      })
+      .catch((err) => console.error("Failed to get albums:", err));
+  }, []);
 
   const [liked, setLiked] = useState(() =>
     loadPreferenceMap("streamify-liked"),
@@ -543,34 +547,38 @@ const Feed = () => {
                       />
                     </div>
 
-                    {music.musics.map(() => {
-                      <audio
-                        ref={(node) => {
-                          if (node) {
-                            audioRefs.current[trackId] = node;
-                            node.volume = volume;
-                          }
-                        }}
-                        src={music.musics}
-                        preload="metadata"
-                        onPlay={() => {
-                          pauseOtherTracks(trackId);
-                          setActiveTrackId(trackId);
-                        }}
-                        onPause={() => {
-                          if (activeTrackId === trackId) {
-                            setActiveTrackId(null);
-                          }
-                        }}
-                        onTimeUpdate={() => handleTimeUpdate(trackId)}
-                        onLoadedMetadata={() => handleTimeUpdate(trackId)}
-                        onEnded={() => {
-                          if (activeTrackId === trackId) {
-                            setActiveTrackId(null);
-                            setCurrentTime(0);
-                          }
-                        }}
-                      />;
+                    {music.musics.map((trackUri, index) => {
+                      const albumTrackId = `${trackId}-${index}`;
+                      return (
+                        <audio
+                          key={albumTrackId}
+                          ref={(node) => {
+                            if (node) {
+                              audioRefs.current[albumTrackId] = node;
+                              node.volume = volume;
+                            }
+                          }}
+                          src={trackUri}
+                          preload="metadata"
+                          onPlay={() => {
+                            pauseOtherTracks(albumTrackId);
+                            setActiveTrackId(albumTrackId);
+                          }}
+                          onPause={() => {
+                            if (activeTrackId === albumTrackId) {
+                              setActiveTrackId(null);
+                            }
+                          }}
+                          onTimeUpdate={() => handleTimeUpdate(albumTrackId)}
+                          onLoadedMetadata={() => handleTimeUpdate(albumTrackId)}
+                          onEnded={() => {
+                            if (activeTrackId === albumTrackId) {
+                              setActiveTrackId(null);
+                              setCurrentTime(0);
+                            }
+                          }}
+                        />
+                      );
                     })}
                   </div>
 

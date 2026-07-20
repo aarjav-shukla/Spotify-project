@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import axios from "axios";
+import { musicAPI } from "../api";
 import { Navigate, useNavigate, Link } from "react-router-dom";
 import { RiArrowRightLongLine } from "@remixicon/react";
 
@@ -11,11 +11,7 @@ const Post = () => {
     e.preventDefault();
     const formdata = new FormData(e.target);
     try {
-      const res = await axios.post(
-        "https://spotify-project-la1t.onrender.com/api/music/upload",
-        formdata,
-        { withCredentials: true },
-      );
+      const res = await musicAPI.upload(formdata);
 
       navigate("/admin");
     } catch (err) {

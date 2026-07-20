@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import { musicAPI } from "../api";
 import { Navigate, Link } from "react-router-dom";
 import { RiArrowRightLongLine } from "@remixicon/react";
 
@@ -9,16 +9,6 @@ const emptyDraft = { title: "", file: null };
 const Admin = () => {
   const [file, setfile] = useState("Select the image");
   const inputref = useRef();
-
-  function formhandle(e) {
-    e.preventDefault();
-    const formdata = new FormData(e.target);
-    axios
-      .post("https://spotify-project-la1t.onrender.com/upload", formdata)
-      .then((res) => {
-        navigate("/feed");
-      });
-  }
 
   const navigate = useNavigate();
   const [musicList, setMusicList] = useState([]);
@@ -34,12 +24,7 @@ const Admin = () => {
       setError("");
 
       try {
-        const response = await axios.get(
-          "https://spotify-project-la1t.onrender.com/api/music/mine",
-          {
-            withCredentials: true,
-          },
-        );
+        const response = await musicAPI.getMine();
 
         const tracks = response.data?.musics ?? [];
         setMusicList(tracks);
@@ -98,11 +83,7 @@ const Admin = () => {
     setError("");
 
     try {
-      const response = await axios.put(
-        `https://spotify-project-la1t.onrender.com/api/music/${music._id}`,
-        formData,
-        { withCredentials: true },
-      );
+      const response = await musicAPI.update(music._id, formData);
 
       setMusicList((current) =>
         current.map((track) =>
@@ -125,12 +106,7 @@ const Admin = () => {
     setError("");
 
     try {
-      await axios.delete(
-        `https://spotify-project-la1t.onrender.com/api/music/${musicId}`,
-        {
-          withCredentials: true,
-        },
-      );
+      await musicAPI.delete(musicId);
 
       setMusicList((current) =>
         current.filter((track) => track._id !== musicId),
