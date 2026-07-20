@@ -14,6 +14,7 @@ const Post = () => {
      const res = await axios.post(
        "http://localhost:3000/api/music/upload",
        formdata,
+       { withCredentials: true },
      );
      console.log(res.data);
      navigate("/admin");
@@ -54,10 +55,10 @@ const Post = () => {
               </h2>
             </div>
 
-            <input
+            <input required
               type="file"
               className="hidden"
-              name="song"
+              name="music"
               ref={inputref}
               onChange={(e) => {
                 if (e.target.files[0]) {
@@ -75,7 +76,7 @@ const Post = () => {
               {file}
             </button>
 
-            <input
+            <input required
               type="text"
               placeholder="Enter Title"
               name="title"
