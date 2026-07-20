@@ -36,7 +36,7 @@ const Feed = () => {
     axios.get("http://localhost:3000/api/music/getmusic").then((res) => {
       setmusics(res.data.musics);
     });
-  });
+  },[]);
   useEffect(()=>{
     axios.get("http://localhost:3000/api/music/getalbums").then((res)=>{
       setalbums(res.data.albums)
