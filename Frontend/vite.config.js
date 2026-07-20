@@ -8,7 +8,7 @@ export default defineConfig({
   server: {
     proxy: {
       "/api": {
-        target: "https://spotify-project-la1t.onrender.com",
+        target: "http://localhost:3000",
         changeOrigin: true,
       },
     },
