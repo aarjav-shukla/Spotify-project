@@ -33,12 +33,12 @@ const Feed = () => {
   const [volume, setVolume] = useState(0.82);
 
   useEffect(() => {
-    axios.get("http://localhost:3000/api/music/getmusic").then((res) => {
+    axios.get("https://spotify-project-la1t.onrender.com/api/music/getmusic").then((res) => {
       setmusics(res.data.musics);
     });
   },[]);
   useEffect(()=>{
-    axios.get("http://localhost:3000/api/music/getalbums").then((res)=>{
+    axios.get("https://spotify-project-la1t.onrender.com/api/music/getalbums").then((res)=>{
       setalbums(res.data.albums)
       console.log(res.data.albums)
     });

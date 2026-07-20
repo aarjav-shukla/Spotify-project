@@ -77,7 +77,7 @@ const Login = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:3000/api/auth/registeruser",
+        "https://spotify-project-la1t.onrender.com/api/auth/registeruser",
         {
           username: form.username,
           email: form.email,
@@ -103,7 +103,7 @@ const Login = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:3000/api/auth/loginuser",
+        "https://spotify-project-la1t.onrender.com/api/auth/loginuser",
         {
           username: loginForm.identifier,
           email: loginForm.identifier,

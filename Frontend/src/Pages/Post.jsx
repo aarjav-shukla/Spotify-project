@@ -7,21 +7,21 @@ const Post = () => {
   const [file, setfile] = useState("Select the song");
   const inputref = useRef();
   const navigate = useNavigate();
- async function formhandle(e) {
-   e.preventDefault();
-   const formdata = new FormData(e.target);
-   try {
-     const res = await axios.post(
-       "http://localhost:3000/api/music/upload",
-       formdata,
-       { withCredentials: true },
-     );
-   
-     navigate("/admin");
-   } catch (err) {
-     console.error("Upload failed:", err.response?.data || err.message);
-   }
- }
+  async function formhandle(e) {
+    e.preventDefault();
+    const formdata = new FormData(e.target);
+    try {
+      const res = await axios.post(
+        "https://spotify-project-la1t.onrender.com/api/music/upload",
+        formdata,
+        { withCredentials: true },
+      );
+
+      navigate("/admin");
+    } catch (err) {
+      console.error("Upload failed:", err.response?.data || err.message);
+    }
+  }
 
   return (
     <div className="h-screen overflow-hidden w-full bg-[#0C1014] text-white">
@@ -55,7 +55,8 @@ const Post = () => {
               </h2>
             </div>
 
-            <input required
+            <input
+              required
               type="file"
               className="hidden"
               name="music"
@@ -76,19 +77,19 @@ const Post = () => {
               {file}
             </button>
 
-            <input required
+            <input
+              required
               type="text"
               placeholder="Enter Title"
               name="title"
               className="w-full max-w-xs rounded-2xl border border-zinc-700 bg-[#0C1014] px-4 py-3 text-sm text-white outline-none placeholder:text-zinc-500"
             />
-          
 
             <button
               className="w-full max-w-xs rounded-full bg-white px-4 py-3 text-sm font-semibold text-black transition hover:bg-zinc-200"
               type="submit"
             >
-          Upload
+              Upload
             </button>
           </div>
         </form>

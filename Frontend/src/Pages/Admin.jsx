@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState,useRef } from "react";
+import { useEffect, useMemo, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Navigate, Link } from "react-router-dom";
@@ -7,18 +7,18 @@ import { RiArrowRightLongLine } from "@remixicon/react";
 const emptyDraft = { title: "", file: null };
 
 const Admin = () => {
-
-const [file, setfile] = useState("Select the image");
+  const [file, setfile] = useState("Select the image");
   const inputref = useRef();
 
   function formhandle(e) {
     e.preventDefault();
     const formdata = new FormData(e.target);
-    axios.post("http://localhost:3000/upload", formdata).then((res) => {
-      navigate("/feed");
-    });
+    axios
+      .post("https://spotify-project-la1t.onrender.com/upload", formdata)
+      .then((res) => {
+        navigate("/feed");
+      });
   }
-
 
   const navigate = useNavigate();
   const [musicList, setMusicList] = useState([]);
@@ -35,7 +35,7 @@ const [file, setfile] = useState("Select the image");
 
       try {
         const response = await axios.get(
-          "http://localhost:3000/api/music/mine",
+          "https://spotify-project-la1t.onrender.com/api/music/mine",
           {
             withCredentials: true,
           },
@@ -99,7 +99,7 @@ const [file, setfile] = useState("Select the image");
 
     try {
       const response = await axios.put(
-        `http://localhost:3000/api/music/${music._id}`,
+        `https://spotify-project-la1t.onrender.com/api/music/${music._id}`,
         formData,
         { withCredentials: true },
       );
@@ -125,9 +125,12 @@ const [file, setfile] = useState("Select the image");
     setError("");
 
     try {
-      await axios.delete(`http://localhost:3000/api/music/${musicId}`, {
-        withCredentials: true,
-      });
+      await axios.delete(
+        `https://spotify-project-la1t.onrender.com/api/music/${musicId}`,
+        {
+          withCredentials: true,
+        },
+      );
 
       setMusicList((current) =>
         current.filter((track) => track._id !== musicId),
@@ -348,16 +351,12 @@ const [file, setfile] = useState("Select the image");
         </section>
       </div>
 
-    
-        <Link to="/post">
-          <div className="absolute right-6 top-6 flex items-center gap-2 rounded-full border border-zinc-700 bg-[#0C1014]/80 px-4 py-2 text-sm font-semibold text-white backdrop-blur transition hover:bg-zinc-800">
-            Create
-            <RiArrowRightLongLine />
-          </div>
-        </Link>
-
-        
-    
+      <Link to="/post">
+        <div className="absolute right-6 top-6 flex items-center gap-2 rounded-full border border-zinc-700 bg-[#0C1014]/80 px-4 py-2 text-sm font-semibold text-white backdrop-blur transition hover:bg-zinc-800">
+          Create
+          <RiArrowRightLongLine />
+        </div>
+      </Link>
     </main>
   );
 };
