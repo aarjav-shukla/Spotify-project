@@ -1,7 +1,8 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: "https://spotify-project-la1t.onrender.com",
+  // baseURL: 'https://spotify-project-main.onrender.com',
+  baseURLL :"http://localhost:3000",
   withCredentials: true,
 });
 

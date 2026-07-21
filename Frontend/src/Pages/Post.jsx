@@ -5,10 +5,13 @@ import { RiArrowRightLongLine } from "@remixicon/react";
 
 const Post = () => {
   const [file, setfile] = useState("Select the song");
+  const [loading, setLoading] = useState(false);
   const inputref = useRef();
   const navigate = useNavigate();
+  
   async function formhandle(e) {
     e.preventDefault();
+    setLoading(true);
     const formdata = new FormData(e.target);
     try {
       const res = await musicAPI.upload(formdata);
@@ -16,6 +19,8 @@ const Post = () => {
       navigate("/admin");
     } catch (err) {
       console.error("Upload failed:", err.response?.data || err.message);
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -82,10 +87,11 @@ const Post = () => {
             />
 
             <button
-              className="w-full max-w-xs rounded-full bg-white px-4 py-3 text-sm font-semibold text-black transition hover:bg-zinc-200"
+              className="w-full max-w-xs rounded-full bg-white px-4 py-3 text-sm font-semibold text-black transition hover:bg-zinc-200 disabled:opacity-50 disabled:cursor-not-allowed"
               type="submit"
+              disabled={loading}
             >
-              Upload
+              {loading ? "Uploading..." : "Upload"}
             </button>
           </div>
         </form>
